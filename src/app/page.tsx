@@ -43,7 +43,7 @@ export default function VoiceInputPage() {
       recognitionRef.current?.stop();
       setStatus("인식 중단 중...");
     } else {
-      setText(""); // 새로 시작할 때 초기화
+      // setText(""); // 새로 시작할 때 초기화
       recognitionRef.current?.start();
       setIsListening(true);
       setStatus("🎤 듣고 있습니다... 말씀해 주세요.");
