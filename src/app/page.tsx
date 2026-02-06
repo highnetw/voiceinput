@@ -17,15 +17,24 @@ export default function VoiceInputPage() {
       recognition.continuous = true;
       recognition.interimResults = true;
 
+      // 여기서 부터 수정 시작 0207 0205
       recognition.onresult = (event: any) => {
-        let finalTranscript = "";
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        let finalTranscript = ""; // 확정된 문장들
+        let interimTranscript = ""; // 지금 말하고 있는 중인 문장
+
+        for (let i = 0; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
-            // 확정된 문장만 누적해서 보여줍니다.
-            setText((prev) => prev + event.results[i][0].transcript + " ");
+            finalTranscript += transcript + " ";
+          } else {
+            interimTranscript += transcript;
           }
         }
+        // 확정된 문장 뒤에 지금 말하는 중인 문장을 붙여서 실시간으로 보여줍니다.
+        // 이 방식은 기존 텍스트에 더하는(prev +) 게 아니라서 중복이 생기지 않습니다.
+        setText(finalTranscript + interimTranscript);
       };
+      // 여기까지 수정 끝 0207 0205
 
       recognition.onend = () => {
         setIsListening(false);
